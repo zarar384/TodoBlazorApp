@@ -1,0 +1,29 @@
+@TodoMiniAPIApp_HostAddress = http://localhost:5000
+
+GET {{TodoMiniAPIApp_HostAddress}}/todoitems/
+Accept: application/json
+
+###Replace {id}
+GET {{TodoMiniAPIApp_HostAddress}}/todoitems/{id}
+Accept: application/json
+
+###
+POST {{TodoMiniAPIApp_HostAddress}}/todoitems/
+Content-Type: application/json
+
+{
+    "Name": "Study Czech",
+    "IsComplete": false
+}
+
+###Replace {id}
+PUT {{TodoMiniAPIApp_HostAddress}}/todoitems/{id}
+Content-Type: application/json
+
+{
+    "Name": "Study Czech",
+    "IsComplete": true
+}
+
+###Replace {id}
+DELETE {{TodoMiniAPIApp_HostAddress}}/todoitems/{id}
