@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoMiniAPIApp.Modules;
+using TodoMiniAPI.Models;
 
-namespace TodoMiniAPIApp.Data
+namespace TodoMiniAPI.Data
 {
     public class AppDbContext: DbContext
     {

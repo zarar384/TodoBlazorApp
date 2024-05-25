@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34902.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoMiniAPIApp", "TodoMiniAPIApp\TodoMiniAPIApp.csproj", "{52306EBA-4413-47E4-BABB-912229BF3B28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoMiniAPI", "TodoMiniAPIApp\TodoMiniAPI.csproj", "{52306EBA-4413-47E4-BABB-912229BF3B28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoWeb", "TodoWeb\TodoWeb.csproj", "{F6AF3969-5DE1-410D-AD6A-CBFBD841BBEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{52306EBA-4413-47E4-BABB-912229BF3B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52306EBA-4413-47E4-BABB-912229BF3B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52306EBA-4413-47E4-BABB-912229BF3B28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6AF3969-5DE1-410D-AD6A-CBFBD841BBEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6AF3969-5DE1-410D-AD6A-CBFBD841BBEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6AF3969-5DE1-410D-AD6A-CBFBD841BBEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6AF3969-5DE1-410D-AD6A-CBFBD841BBEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

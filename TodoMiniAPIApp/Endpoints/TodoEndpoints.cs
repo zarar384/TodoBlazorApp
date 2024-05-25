@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoMiniAPIApp.Data;
-using TodoMiniAPIApp.Modules;
+using TodoMiniAPI.Data;
+using TodoMiniAPI.Models;
 
-namespace TodoMiniAPIApp.Endpoints
+namespace TodoMiniAPI.Endpoints
 {
     public static class TodoEndpoints
     {

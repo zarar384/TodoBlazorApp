@@ -1,5 +1,5 @@
-using TodoMiniAPIApp.Endpoints;
-using TodoMiniAPIApp.Extensions;
+using TodoMiniAPI.Endpoints;
+using TodoMiniAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

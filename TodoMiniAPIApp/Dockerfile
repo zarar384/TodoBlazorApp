@@ -9,17 +9,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["TodoMiniAPIApp/TodoMiniAPIApp.csproj", "TodoMiniAPIApp/"]
-RUN dotnet restore "./TodoMiniAPIApp/TodoMiniAPIApp.csproj"
+COPY ["TodoMiniAPI/TodoMiniAPI.csproj", "TodoMiniAPI/"]
+RUN dotnet restore "./TodoMiniAPI/TodoMiniAPI.csproj"
 COPY . .
-WORKDIR "/src/TodoMiniAPIApp"
-RUN dotnet build "./TodoMiniAPIApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/TodoMiniAPI"
+RUN dotnet build "./TodoMiniAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./TodoMiniAPIApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./TodoMiniAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "TodoMiniAPIApp.dll"]
+ENTRYPOINT ["dotnet", "TodoMiniAPI.dll"]

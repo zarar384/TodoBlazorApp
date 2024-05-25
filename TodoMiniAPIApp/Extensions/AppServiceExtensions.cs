@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoMiniAPIApp.Data;
+using TodoMiniAPI.Data;
 
-namespace TodoMiniAPIApp.Extensions
+namespace TodoMiniAPI.Extensions
 {
     public static class AppServiceExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace TodoMiniAPIApp.Modules
+﻿namespace TodoMiniAPI.Models
 {
     public class Todo
     {
