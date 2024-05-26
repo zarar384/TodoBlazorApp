@@ -24,10 +24,9 @@ namespace TodoMiniAPI.Endpoints
             {
                 var todo = await db.Todos.FindAsync(id);
                 if (todo == null) return Results.NotFound();
-                todo.Name = inputTodo.Name;
                 todo.IsComplete = inputTodo.IsComplete;
                 await db.SaveChangesAsync();
-                return Results.NoContent();
+                return Results.Ok(todo);
             });
 
             todoItemsEndpoint.MapDelete("{id:int}", async (int id, AppDbContext db) =>

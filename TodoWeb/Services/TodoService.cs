@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
 using TodoWeb.IServices;
 using TodoWeb.Models;
 
@@ -8,10 +9,11 @@ namespace TodoWeb.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<TodoService> _logger;
+        private readonly HttpClient _client;
 
-        public TodoService(HttpClient httpClient, ILogger<TodoService> logger)
+        public TodoService(IHttpClientFactory httpClientFactory, ILogger<TodoService> logger)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient("TodoMiniApiService"); 
             _logger = logger;
         }
 
@@ -20,7 +22,7 @@ namespace TodoWeb.Services
             try
             {
                 _logger.LogInformation("Adding a new todo item to API.");
-                var response = await _httpClient.PostAsJsonAsync("api/todos", dto);
+                var response = await _httpClient.PostAsJsonAsync("/todoitems", dto);
 
                 response.EnsureSuccessStatusCode();
 
@@ -40,7 +42,7 @@ namespace TodoWeb.Services
             try
             {
                 _logger.LogInformation("Deleting todo item with ID {0} from API.", id);
-                var response = await _httpClient.DeleteAsync($"api/todos/{id}");
+                var response = await _httpClient.DeleteAsync($"/todoitems/{id}");
 
                 response.EnsureSuccessStatusCode();
 
@@ -59,7 +61,7 @@ namespace TodoWeb.Services
             try
             {
                 _logger.LogInformation("Fetching all todo items from API.");
-                var todos = await _httpClient.GetFromJsonAsync<List<TodoDto>>("api/todos");
+                var todos = await _httpClient.GetFromJsonAsync<List<TodoDto>>("/todoitems");
 
                 return todos;
             }
@@ -76,7 +78,7 @@ namespace TodoWeb.Services
             try
             {
                 _logger.LogInformation("Fetching todo item with ID {0} from API.", id);
-                var todo = await _httpClient.GetFromJsonAsync<TodoDto>($"api/todos/{id}");
+                var todo = await _httpClient.GetFromJsonAsync<TodoDto>($"/todoitems/{id}");
 
                 return todo;
             }
@@ -93,7 +95,7 @@ namespace TodoWeb.Services
             try
             {
                 _logger.LogInformation("Updating todo item with ID {0} in API.", id);
-                var response = await _httpClient.PutAsJsonAsync($"api/todos/{id}", dto);
+                var response = await _httpClient.PutAsJsonAsync($"/todoitems/{id}", dto);
 
                 response.EnsureSuccessStatusCode();
 

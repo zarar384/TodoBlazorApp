@@ -1,0 +1,40 @@
+﻿@page "/add-todo"
+@using TodoWeb.IServices
+@using TodoWeb.Models
+@inject ITodoService TodoService
+
+<PageTitle>Add</PageTitle>
+
+@code {
+    private TodoDto todoDto = new TodoDto();
+
+    private async Task CreateTodo()
+    {
+        try
+        {
+            await TodoService.CreateAsync(todoDto);
+
+            todoDto = new TodoDto();
+        }
+        catch
+        {
+            
+        }
+    }
+}
+
+<EditForm Model="todoDto" OnValidSubmit="CreateTodo">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <InputText id="title" @bind-Value="todoDto.Title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <InputTextArea id="description" @bind-Value="todoDto.Description" class="form-control" rows="3"></InputTextArea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Todo</button>
+</EditForm>
