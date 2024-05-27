@@ -30,20 +30,39 @@
         }
         catch
         {
-            
+
+        }
+    }
+
+    private async Task DeleteTodo(TodoDto todo)
+    {
+        try
+        {
+            await TodoService.DeleteAsync(todo.Id);
+
+            todos.Remove(todo);
+        }
+        catch
+        {
+
         }
     }
 }
 
 <ul>
-    @foreach (var todo in todos)
-    {
-        <li class="card" @onclick="()=>ToggleComplete(todo)">
-            <div class="card-body">
-                <h5 class="card-title" style="text-decoration: @(todo.IsComplete? "line-through" : "none");">@todo.Id) @todo.Title</h5>
-                <p class="card-description" style="text-decoration: @(todo.IsComplete? "line-through" : "none");">@todo.Description</p>
-            </div>
-        </li>
-    }
+    <ul class="card-container">
+        @foreach (var todo in todos)
+        {
+            <li class="card">
+                <div class="card-body" @onclick="()=>ToggleComplete(todo)">
+                    <h5 class="card-title" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Id) @todo.Title</h5>
+                    <p class="card-description" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Description</p>
+                </div>
+                <div class="card-buttons">
+                    <button class="btn-delete" @onclick="()=>DeleteTodo(todo)">Delete</button>
+                </div>
+            </li>
+        }
+    </ul>
 </ul>
 

@@ -11,7 +11,7 @@ builder.Services.AddAppServices();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("TodoWeb",
-        builder => builder.WithOrigins("https://localhost:7102")
+        builder => builder.WithOrigins("http://localhost:5069")
                        .AllowAnyHeader()
                        .AllowAnyMethod());
 });
