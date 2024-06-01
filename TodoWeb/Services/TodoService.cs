@@ -1,5 +1,6 @@
-﻿using System.Net.Http;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
+using TodoWeb.Extensions;
+using TodoWeb.Helpers;
 using TodoWeb.IServices;
 using TodoWeb.Models;
 
@@ -56,12 +57,21 @@ namespace TodoWeb.Services
             }
         }
 
-        public async Task<List<TodoDto>> GetAllAsync()
+        public async Task<List<TodoDto>> GetTodoAsync(int pageIndex, int pageSize)
         {
             try
             {
                 _logger.LogInformation("Fetching all todo items from API.");
-                var todos = await _httpClient.GetFromJsonAsync<List<TodoDto>>("/todoitems");
+
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/todoitems");
+                
+                HttpExtensions.AddPaginationHeader(requestMessage, new PaginationHeader(pageIndex, pageSize));
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                response.EnsureSuccessStatusCode();
+
+                var todos = await response.Content.ReadFromJsonAsync<List<TodoDto>>();
 
                 return todos;
             }
@@ -89,7 +99,6 @@ namespace TodoWeb.Services
                 throw new Exception(ex.Message);
             }
         }
-
         public async Task<TodoDto> UpdateAsync(int id, TodoDto dto)
         {
             try
@@ -105,6 +114,28 @@ namespace TodoWeb.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while updating todo item with ID {0}.", id);
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<int> GetCount()
+        {
+            try
+            {
+                _logger.LogInformation("Fetching count of todo items from API.");
+                var response = await _httpClient.GetAsync("/todoitems/count");
+
+                response.EnsureSuccessStatusCode();
+
+                var countStrign = await response.Content.ReadAsStringAsync();
+                var count = int.Parse(countStrign);
+
+                return count;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching count of todo items.");
 
                 throw new Exception(ex.Message);
             }

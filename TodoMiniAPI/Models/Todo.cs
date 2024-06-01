@@ -1,4 +1,6 @@
-﻿namespace TodoMiniAPI.Models
+﻿using TodoMiniAPI.Helpers;
+
+namespace TodoMiniAPI.Models
 {
     public class Todo
     {

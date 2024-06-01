@@ -1,18 +1,37 @@
 ﻿@page "/todo-list"
 @using TodoWeb.IServices
 @using TodoWeb.Models
+@using TodoWeb.Components
 @inject ITodoService TodoService
 
 <PageTitle>Todo List</PageTitle>
 
 @code {
+    private int pageSize = 10;
+    private int todoCount;
+    private int currentPageIndex = 0;
     private List<TodoDto> todos = new List<TodoDto>();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            todos = await TodoService.GetAllAsync();
+            todoCount = await TodoService.GetCount();
+
+            await LoadTodoAsync(currentPageIndex);
+        }
+        catch
+        {
+
+        }
+    }
+
+    private async Task LoadTodoAsync(int pageIndex)
+    {
+        try
+        {
+            currentPageIndex = pageIndex;
+            todos = await TodoService.GetTodoAsync(pageIndex, pageSize);
         }
         catch
         {
@@ -41,6 +60,17 @@
             await TodoService.DeleteAsync(todo.Id);
 
             todos.Remove(todo);
+            todoCount--;
+
+            if(todos.Count == 0 && todoCount > 0)
+            {
+                int lastPageIndex = (todoCount - 1) / pageSize;
+                await LoadTodoAsync(lastPageIndex);
+            }
+            else
+            {
+                await LoadTodoAsync(currentPageIndex);
+            }
         }
         catch
         {
@@ -64,5 +94,7 @@
             </li>
         }
     </ul>
+
+    <Pagination TotalItems="todoCount" MaxPageSize="pageSize" OnPageChanged="LoadTodoAsync"></Pagination>
 </ul>
 

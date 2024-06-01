@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using TodoMiniAPI.Data;
+using TodoMiniAPI.Extensions;
+using TodoMiniAPI.Helpers;
 using TodoMiniAPI.Models;
 
 namespace TodoMiniAPI.Endpoints
@@ -10,7 +13,24 @@ namespace TodoMiniAPI.Endpoints
         {
             var todoItemsEndpoint = app.MapGroup("/todoitems");
 
-            todoItemsEndpoint.MapGet("", async (AppDbContext db) => await db.Todos.ToListAsync());
+            todoItemsEndpoint.MapGet("", async (AppDbContext db, HttpRequest request) =>
+            {
+                if (request.Headers.TryGetValue("Pagination", out var paginationHeaderValues))
+                {
+                    var paginationHeaderJson = paginationHeaderValues.FirstOrDefault();
+                    var paginationHeader = JsonSerializer.Deserialize<PaginationHeader>(paginationHeaderJson);
+
+                    return await PageList<Todo>.CreateAsync(
+                        db.Todos.AsQueryable(), 
+                        paginationHeader.currentPage,
+                        paginationHeader.pageSize);
+                }
+
+
+                return await db.Todos.ToListAsync();
+            });
+
+            todoItemsEndpoint.MapGet("count", async (AppDbContext db) => await db.Todos.CountAsync());
 
             todoItemsEndpoint.MapGet("{id:int}", async (int id, AppDbContext db) => await db.Todos.FindAsync(id));
 
