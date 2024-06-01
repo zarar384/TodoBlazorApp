@@ -61,7 +61,7 @@ namespace TodoWeb.Services
         {
             try
             {
-                _logger.LogInformation("Fetching all todo items from API.");
+                _logger.LogInformation("Fetching todo items from API. Page Index: {0}, Page Size: {1}", pageIndex, pageSize);
 
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/todoitems");
                 
@@ -72,6 +72,26 @@ namespace TodoWeb.Services
                 response.EnsureSuccessStatusCode();
 
                 var todos = await response.Content.ReadFromJsonAsync<List<TodoDto>>();
+
+                return todos;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching todo items.Page Index: {0}, Page Size: {1}", pageIndex, pageSize);
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<TodoDto>> GetAllAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Fetching all todo items from API.");
+
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/todoitems");
+
+                var todos = await _httpClient.GetFromJsonAsync<List<TodoDto>>("/todoitems");
 
                 return todos;
             }
