@@ -1,4 +1,4 @@
-﻿@page "/todo-list"
+﻿@page "/todolist"
 @using TodoWeb.IServices
 @using TodoWeb.Models
 @using TodoWeb.Components
@@ -11,6 +11,8 @@
     private int todoCount;
     private int currentPageIndex = 0;
     private List<TodoDto> todos = new List<TodoDto>();
+    private TodoDto newTodo = new TodoDto();
+    private bool isAddNewTodo = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,6 +34,11 @@
         {
             currentPageIndex = pageIndex;
             todos = await TodoService.GetTodoAsync(pageIndex, pageSize);
+
+            if (isAddNewTodo)
+            {
+                isAddNewTodo = false;
+            }
         }
         catch
         {
@@ -62,7 +69,7 @@
             todos.Remove(todo);
             todoCount--;
 
-            if(todos.Count == 0 && todoCount > 0)
+            if (todos.Count == 0 && todoCount > 0)
             {
                 int lastPageIndex = (todoCount - 1) / pageSize;
                 await LoadTodoAsync(lastPageIndex);
@@ -77,10 +84,59 @@
 
         }
     }
-}
 
-<ul>
-    <ul class="card-container">
+    private async void ShowAddNewTodo()
+    {
+        newTodo = new TodoDto();
+
+        int lastPageIndex = todoCount / pageSize;
+
+        if (currentPageIndex != lastPageIndex)
+        {
+            await LoadTodoAsync(lastPageIndex);
+        }
+
+        isAddNewTodo = true;
+    }
+
+    private async Task SaveNewTodo()
+    {
+        try
+        {
+            var nt = await TodoService.CreateAsync(newTodo);
+            todos.Add(nt);
+            todoCount++;
+
+            if (todos.Count == 1)
+            {
+                await LoadTodoAsync(currentPageIndex);
+            }
+
+            isAddNewTodo = false;
+        }
+        catch
+        {
+
+        }
+    }
+
+    private async void CancelNewTodo()
+    {
+        isAddNewTodo = false;
+        newTodo = new TodoDto();
+
+        if (todos.Count == 0)
+        {
+            await LoadTodoAsync(currentPageIndex);
+        }
+    }
+}
+<div style="padding-bottom: 15px">
+    <div style="visibility: @(!isAddNewTodo ? "hidden" : "visible"); height: 40px;"></div>
+    <button class="btn-add" @onclick="ShowAddNewTodo" style="visibility: @(!isAddNewTodo ? "visible" : "hidden")">Add</button>
+</div>
+<div class="container-wrapper">
+    <div class="card-container">
         @foreach (var todo in todos)
         {
             <li class="card">
@@ -93,8 +149,12 @@
                 </div>
             </li>
         }
-    </ul>
-
-    <Pagination TotalItems="todoCount" MaxPageSize="pageSize" OnPageChanged="LoadTodoAsync"></Pagination>
-</ul>
-
+        @if (isAddNewTodo)
+        {
+            <NewCard T="TodoDto" NewItem="newTodo" OnSave="SaveNewTodo" OnCancel="CancelNewTodo" />
+        }
+    </div>
+    <div class="pagination-container">
+        <Pagination TotalItems="todoCount" MaxPageSize="pageSize" OnPageChanged="LoadTodoAsync"></Pagination>
+    </div>
+</div>

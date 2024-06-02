@@ -1,0 +1,44 @@
+﻿@using TodoWeb.Models.Interfaces
+@typeparam T;
+
+@code {
+    [Parameter] public T NewItem { get; set; }
+    [Parameter] public EventCallback OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private async Task SaveAsync()
+    {
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync(null);
+        }
+    }
+
+    private async Task CancelAsync()
+    {
+        if (OnCancel.HasDelegate)
+        {
+            await OnCancel.InvokeAsync(null);
+        }
+    }
+}
+
+@if (NewItem is ICard card)
+{
+    var isSaveEnabled = !string.IsNullOrEmpty(card.Title) && !string.IsNullOrEmpty(card.Description);
+
+    <li class="card">
+        <div class="card-body">
+            <input class="card-title" @bind="card.Title" placeholder="Title"/>
+            <textarea class="card-description" @bind="card.Description" placeholder="Description" cols="30"/>
+        </div>
+        <div class="card-buttons">
+            <button class=@((isSaveEnabled) ? "btn-save" : "btn-save-disabled") @onclick="SaveAsync" disabled="@(!(isSaveEnabled))">Save</button>
+            <button class="btn-cancel" @onclick="CancelAsync">Cancel</button>
+        </div>
+    </li>
+}
+else
+{
+    <p>Error: The type parameter does not implement ICard.</p>
+}

@@ -1,6 +1,8 @@
-﻿namespace TodoWeb.Models
+﻿using TodoWeb.Models.Interfaces;
+
+namespace TodoWeb.Models
 {
-    public class TodoDto
+    public class TodoDto: ICard
     {
         public int Id { get; set; }
         public string Title { get; set; }

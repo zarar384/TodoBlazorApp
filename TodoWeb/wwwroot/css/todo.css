@@ -6,7 +6,7 @@
     margin-right: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     width: calc(20% - 20px); /*max 5 in a row*/
-    flex-direction: column
+    flex-direction: column;
 }
 
 .card-body {
@@ -14,17 +14,23 @@
     flex-direction: column;
     align-items: start;
     cursor: pointer;
+    min-height: 187px;
 }
 
 .card-title {
     font-size: 18px;
     margin-bottom: 10px;
+    width: 100%
 }
 
 .card-description {
     font-size: 14px;
     color: #666;
     margin-bottom: 20px;
+    text-overflow: ellipsis;
+    height: 100%;
+    width: 100%;
+    resize: none;
 }
 
 .card-buttons {
@@ -32,6 +38,11 @@
     justify-content: flex-end;
     align-items: center;
 }
+
+    .card-buttons button {
+        flex: 1;
+        margin-left:5px;
+    }
 
 .btn-delete {
     background-color: #ff4d4d;
@@ -46,7 +57,57 @@
         background-color: #ff1a1a;
     }
 
+.btn-save, .btn-add {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    .btn-save:hover, .btn-add:hover {
+        background-color: #45a049;
+    }
+
+.btn-save-disabled {
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    background-color: #f0ad4e; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    .btn-cancel:hover {
+        background-color: #ec971f; 
+    }
+
+
+.container-wrapper {
+    position: relative;
+    min-height: 800px; 
+    overflow-y: auto; 
+}
+
 .card-container {
     display: flex;
     flex-wrap: wrap; 
+}
+
+.pagination-container {
+    position: absolute;
+    bottom: 0;
+    background-color: white;
+    z-index: 1;
+    width: 100%;
 }
