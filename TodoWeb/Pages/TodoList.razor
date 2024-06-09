@@ -13,6 +13,8 @@
     private List<TodoDto> todos = new List<TodoDto>();
     private TodoDto newTodo = new TodoDto();
     private bool isAddNewTodo = false;
+    private bool isEditTodo = false;
+    private int? editingTodoId = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,12 +54,17 @@
         {
             todo.IsComplete = !todo.IsComplete;
 
-            await TodoService.UpdateAsync(todo.Id, todo);
+            await TodoService.SetComplete(todo.Id, todo);
         }
         catch
         {
 
         }
+    }
+
+    private void EditTodo(TodoDto todo)
+    {
+        editingTodoId = todo.Id;
     }
 
     private async Task DeleteTodo(TodoDto todo)
@@ -120,9 +127,30 @@
         }
     }
 
-    private async void CancelNewTodo()
+    private async Task UpdateTodo(TodoDto todo)
+    {
+        try
+        {
+            var updatedTodo = await TodoService.UpdateAsync(todo.Id, todo);
+
+            var index = todos.FindIndex(t => t.Id == todo.Id);
+            if (index != -1)
+            {
+                todos[index] = updatedTodo;
+            }
+
+            editingTodoId = null;
+        }
+        catch
+        {
+
+        }
+    }
+
+    private async void CancelTodo()
     {
         isAddNewTodo = false;
+        editingTodoId = null;
         newTodo = new TodoDto();
 
         if (todos.Count == 0)
@@ -139,19 +167,27 @@
     <div class="card-container">
         @foreach (var todo in todos)
         {
-            <li class="card">
-                <div class="card-body" @onclick="()=>ToggleComplete(todo)">
-                    <h5 class="card-title" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Id) @todo.Title</h5>
-                    <p class="card-description" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Description</p>
-                </div>
-                <div class="card-buttons">
-                    <button class="btn-delete" @onclick="()=>DeleteTodo(todo)">Delete</button>
-                </div>
-            </li>
+            if (todo.Id == editingTodoId)
+            {
+                <Cart T="TodoDto" NewItem="todo" OnSave="()=>UpdateTodo(todo)" OnCancel="CancelTodo" />
+            }
+            else
+            {
+                <li class="card">
+                    <div class="card-body" @onclick="()=>ToggleComplete(todo)">
+                        <h5 class="card-title" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Id) @todo.Title</h5>
+                        <p class="card-description" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Description</p>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-edit" @onclick="()=>EditTodo(todo)">Edit</button>
+                        <button class="btn-delete" @onclick="()=>DeleteTodo(todo)">Delete</button>
+                    </div>
+                </li>
+            }
         }
         @if (isAddNewTodo)
         {
-            <NewCard T="TodoDto" NewItem="newTodo" OnSave="SaveNewTodo" OnCancel="CancelNewTodo" />
+            <Cart T="TodoDto" NewItem="newTodo" OnSave="SaveNewTodo" OnCancel="CancelTodo" />
         }
     </div>
     <div class="pagination-container">

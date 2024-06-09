@@ -160,5 +160,25 @@ namespace TodoWeb.Services
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<TodoDto> SetComplete(int id, TodoDto selectedTodo)
+        {
+            try
+            {
+                _logger.LogInformation("Updating todo.IsComplete={0} with ID {1} in API.", selectedTodo.IsComplete, id);
+
+                var response = await _httpClient.PutAsJsonAsync($"/todoitems/setComplete/{id}", selectedTodo);
+
+                response.EnsureSuccessStatusCode();
+
+                var updatedTodoItem = await response.Content.ReadFromJsonAsync<TodoDto>();
+                return updatedTodoItem;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating todo.IsComplete={0} item with ID {1}.", selectedTodo.IsComplete, id);
+
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

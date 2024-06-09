@@ -45,6 +45,17 @@ namespace TodoMiniAPI.Endpoints
                 var todo = await db.Todos.FindAsync(id);
                 if (todo == null) return Results.NotFound();
                 todo.IsComplete = inputTodo.IsComplete;
+                todo.Description = inputTodo.Description;
+                todo.Title = inputTodo.Title;
+                await db.SaveChangesAsync();
+                return Results.Ok(todo);
+            });
+
+            todoItemsEndpoint.MapPut("setComplete/{id:int}", async (int id, Todo selectedTodo, AppDbContext db) =>
+            {
+                var todo = await db.Todos.FindAsync(id);
+                if (todo == null) return Results.NotFound();
+                todo.IsComplete = selectedTodo.IsComplete;
                 await db.SaveChangesAsync();
                 return Results.Ok(todo);
             });

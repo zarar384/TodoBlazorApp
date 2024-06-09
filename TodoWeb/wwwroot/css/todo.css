@@ -41,7 +41,7 @@
 
     .card-buttons button {
         flex: 1;
-        margin-left:5px;
+        margin-left: 5px;
     }
 
 .btn-delete {
@@ -79,8 +79,21 @@
     cursor: not-allowed;
 }
 
+.btn-edit {
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    .btn-edit:hover {
+        background-color: #ec971f;
+    }
+
 .btn-cancel {
-    background-color: #f0ad4e; 
+    background-color: #6c757d;
     color: white;
     border: none;
     border-radius: 5px;
@@ -89,19 +102,19 @@
 }
 
     .btn-cancel:hover {
-        background-color: #ec971f; 
+        background-color: #5a6268;
     }
 
 
 .container-wrapper {
     position: relative;
-    min-height: 800px; 
-    overflow-y: auto; 
+    min-height: 800px;
+    overflow-y: auto;
 }
 
 .card-container {
     display: flex;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
 }
 
 .pagination-container {
