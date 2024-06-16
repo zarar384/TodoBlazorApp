@@ -2,8 +2,8 @@
     [Parameter] public int TotalItems { get; set; }
     [Parameter] public int MaxPageSize { get; set; } = 10;
     [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+    [Parameter] public int CurrentPage { get; set; } = 0;
 
-    private int CurrentPage { get; set; } = 0;
     private int TotalPages => (int)Math.Ceiling((double)TotalItems / MaxPageSize);
 
     private bool GoPrevious => CurrentPage > 0;

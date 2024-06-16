@@ -104,6 +104,7 @@
         }
 
         isAddNewTodo = true;
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task SaveNewTodo()
@@ -120,6 +121,7 @@
             }
 
             isAddNewTodo = false;
+            await InvokeAsync(StateHasChanged);
         }
         catch
         {
@@ -155,8 +157,11 @@
 
         if (todos.Count == 0)
         {
+            currentPageIndex--;
             await LoadTodoAsync(currentPageIndex);
         }
+
+        await InvokeAsync(StateHasChanged);
     }
 }
 <div style="padding-bottom: 15px">
@@ -191,6 +196,6 @@
         }
     </div>
     <div class="pagination-container">
-        <Pagination TotalItems="todoCount" MaxPageSize="pageSize" OnPageChanged="LoadTodoAsync"></Pagination>
+        <Pagination TotalItems="todoCount" MaxPageSize="pageSize" OnPageChanged="LoadTodoAsync" CurrentPage="currentPageIndex"></Pagination>
     </div>
 </div>
