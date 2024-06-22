@@ -17,6 +17,33 @@ Content-Type: application/json
     "IsComplete": false
 }
 
+### POST with categories
+POST {{TodoMiniAPI_HostAddress}}/todoitems/
+Content-Type: application/json
+
+{
+    "Title": "Study Czech",
+    "Description": "1. Podstatná jména 2. Přídavná jména",
+    "IsComplete": false,
+    "Categories": [
+        { "Name": "Czech" },
+        { "Name": "Study" }
+    ]
+}
+
+### PUT with a new categories
+PUT {{TodoMiniAPI_HostAddress}}/todoitems/1
+Content-Type: application/json
+
+{
+    "Title": "Study Czech",
+    "Description": "1. Podstatná jména 2. Přídavná jména",
+    "IsComplete": false,
+    "Categories": [
+        { "Name": "Czech" }
+    ]
+}
+
 ###Replace {id}
 PUT {{TodoMiniAPI_HostAddress}}/todoitems/{id}
 Content-Type: application/json

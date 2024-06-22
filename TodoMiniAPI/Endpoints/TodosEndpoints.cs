@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using TodoMiniAPI.Data;
-using TodoMiniAPI.Extensions;
 using TodoMiniAPI.Helpers;
 using TodoMiniAPI.Models;
+using TodoMiniAPI.Services;
 
 namespace TodoMiniAPI.Endpoints
 {
-    public static class TodoEndpoints
+    public static class TodosEndpoints
     {
         public static void Map(WebApplication app)
         {
@@ -21,7 +21,7 @@ namespace TodoMiniAPI.Endpoints
                     var paginationHeader = JsonSerializer.Deserialize<PaginationHeader>(paginationHeaderJson);
 
                     return await PageList<Todo>.CreateAsync(
-                        db.Todos.AsQueryable(), 
+                        db.Todos.AsQueryable(),
                         paginationHeader.currentPage,
                         paginationHeader.pageSize);
                 }
@@ -34,20 +34,34 @@ namespace TodoMiniAPI.Endpoints
 
             todoItemsEndpoint.MapGet("{id:int}", async (int id, AppDbContext db) => await db.Todos.FindAsync(id));
 
-            todoItemsEndpoint.MapPost("", async (Todo todo, AppDbContext db) => { 
-                db.Todos.Add(todo); 
-                await db.SaveChangesAsync(); 
-                return Results.Created($"/todoitems/{todo.Id}", todo); 
+            todoItemsEndpoint.MapPost("", async (Todo todo, AppDbContext db, ICategoryService categoryService) =>
+            {
+                var categories = await categoryService.UpdateCategoriesAsync(todo.Categories, typeof(Todo));
+                todo.Categories = categories;
+
+                db.Todos.Add(todo);
+
+                await db.SaveChangesAsync();
+                return Results.Created($"/todoitems/{todo.Id}", todo);
             });
 
-            todoItemsEndpoint.MapPut("{id:int}", async (int id, Todo inputTodo, AppDbContext db) =>
+            todoItemsEndpoint.MapPut("{id:int}", async (int id, Todo inputTodo, AppDbContext db, ICategoryService categoryService) =>
             {
-                var todo = await db.Todos.FindAsync(id);
+                var todo = await db.Todos
+                    .Include(t=>t.Categories)
+                    .FirstOrDefaultAsync(t => t.Id == id);
+
                 if (todo == null) return Results.NotFound();
+
                 todo.IsComplete = inputTodo.IsComplete;
                 todo.Description = inputTodo.Description;
                 todo.Title = inputTodo.Title;
+
+                var categories = await categoryService.UpdateCategoriesAsync(inputTodo.Categories, typeof(Todo));
+                todo.Categories = categories;
+
                 await db.SaveChangesAsync();
+
                 return Results.Ok(todo);
             });
 

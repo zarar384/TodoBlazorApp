@@ -1,13 +1,13 @@
 using TodoMiniAPI.Endpoints;
 using TodoMiniAPI.Extensions;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using TodoMiniAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAppServices();
 
-//CORS policy
+// CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("TodoWeb",
@@ -22,6 +22,6 @@ var app = builder.Build();
 app.UseCors("TodoWeb"); 
 
 // Configure pipeline - use method
-TodoEndpoints.Map(app);
+TodosEndpoints.Map(app);
 
 app.Run();
