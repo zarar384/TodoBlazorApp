@@ -1,12 +1,12 @@
-﻿namespace TodoMiniAPI.Models
+﻿namespace TodoWeb.Models
 {
-    public class Category: BaseModel
+    public class CategoryDto
     {
+        public int Id { get; set; }
         public string Text { get; set; }
-        public string ObjectType { get; set; } //table name
         public string Color { get; set; }
 
-        public Category()
+        public CategoryDto()
         {
             Color = GetRandomColor();
         }

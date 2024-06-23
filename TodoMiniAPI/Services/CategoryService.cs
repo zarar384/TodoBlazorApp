@@ -26,12 +26,18 @@ namespace TodoMiniAPI.Services
                 {
                     // find by Name
                     existingCategory = await _context.Categories
-                        .FirstOrDefaultAsync(x => x.ObjectType == objectType && x.Name == category.Name);
+                        .FirstOrDefaultAsync(x => x.ObjectType == objectType && x.Text == category.Text);
                 }
                 else
                 {
                     // find by Id
                     existingCategory = await _context.Categories.FindAsync(category.Id);
+
+                    if(existingCategory != null && existingCategory.Text != category.Text)
+                    {
+                        // update category 
+                        existingCategory.Text = category.Text;
+                    }
                 }
 
                 if (existingCategory != null)
@@ -43,7 +49,7 @@ namespace TodoMiniAPI.Services
                     // create a new
                     var newCategory = new Category
                     {
-                        Name = category.Name,
+                        Text = category.Text,
                         ObjectType = objectType,
                     };
 

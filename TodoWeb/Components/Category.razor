@@ -1,0 +1,77 @@
+﻿@using TodoWeb.Models
+
+@code {
+    [Parameter] public CategoryDto CategoryItem { get; set; }
+    [Parameter] public bool IsEditMod { get; set; } = false;
+    [Parameter] public int Index { get; set; }
+    [Parameter] public EventCallback<int> RemoveCategory { get; set; }
+    [Parameter] public EventCallback<(int, string)> EditCategory { get; set; }
+
+    bool isHovered = false;
+    bool isEditing = false;
+
+    private void OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Backspace" && string.IsNullOrEmpty(CategoryItem.Text))
+        {
+            RemoveCategory.InvokeAsync(Index);
+        }
+    }
+
+    private async Task OnBlur()
+    {
+        isEditing = false;
+
+        if (string.IsNullOrEmpty(CategoryItem.Text))
+        {
+            await RemoveCategory.InvokeAsync(Index);
+        }
+    }
+
+    private void ToggleEditMode()
+    {
+        if (isHovered)
+        {
+            UpdateInputStyle(CategoryItem.Text);
+            isEditing = true;
+        }
+    }
+
+    private void HandleMouseOver()
+    {
+        isHovered = true;
+    }
+
+    private void HandleMouseOut()
+    {
+        isHovered = false;
+    }
+
+    private string inputStyle = "";
+
+    private void UpdateInputStyle(string text)
+    {
+        var width = (text.Length * 1.1).ToString("0.00").Replace(",", ".") + "ch";
+
+        inputStyle = $"width: {width};";
+    }
+
+    private void ResizeInput(ChangeEventArgs e)
+    {
+        var text = (string)e.Value;
+        CategoryItem.Text = text;
+
+        UpdateInputStyle(text);
+    }
+}
+
+<div class="category" style="background-color: @CategoryItem.Color" @onmouseover="HandleMouseOver" @onmouseout="HandleMouseOut" @onclick="ToggleEditMode">
+    @if (IsEditMod && isEditing)
+    {
+        <input type="text" class="category-input" style="@inputStyle" @oninput="ResizeInput" @bind="CategoryItem.Text" @onkeydown="OnKeyDown" @onblur="OnBlur" />
+    }
+    else
+    {
+        @CategoryItem.Text
+    }
+</div>

@@ -1,0 +1,19 @@
+﻿.category {
+    color: white;
+    padding: 5px;
+    margin: 2px;
+    border-radius: 5px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+
+.category-input {
+    border: none;
+    outline: none;
+    font-size: inherit;
+    background-color: transparent;
+    min-width: 50px;
+}

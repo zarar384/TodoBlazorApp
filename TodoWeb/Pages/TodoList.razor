@@ -3,6 +3,7 @@
 @using TodoWeb.Models
 @using TodoWeb.Components
 
+
 <PageTitle>Todo List</PageTitle>
 
 <div style="padding-bottom: 15px">
@@ -23,6 +24,12 @@
                     <div class="card-body" @onclick="()=>ToggleComplete(todo)">
                         <h5 class="card-title" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Id) @todo.Title</h5>
                         <p class="card-description" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Description</p>
+                    </div>
+                    <div class="card-categories">
+                        @foreach(var category in todo.Categories)
+                        {
+                            <Category CategoryItem="category"></Category>
+                        }
                     </div>
                     <div class="card-buttons">
                         <button class="btn-edit" @onclick="()=>EditTodo(todo)">Edit</button>

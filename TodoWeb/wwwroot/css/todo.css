@@ -124,3 +124,9 @@
     z-index: 1;
     width: 100%;
 }
+
+.card-categories {
+    margin: 5px 0 5px 5px;
+    display: flex;
+    flex-wrap: wrap;
+}

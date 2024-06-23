@@ -1,10 +1,21 @@
-﻿@using TodoWeb.Models.Interfaces
+﻿@using TodoWeb.Models
+@using TodoWeb.Models.Interfaces
 @typeparam T;
 
 @code {
     [Parameter] public T NewItem { get; set; }
     [Parameter] public EventCallback OnSave { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
+
+    private List<CategoryDto> OriginalCategories;
+
+    protected override void OnInitialized()
+    {
+        if (NewItem is ICard card)
+        {
+            OriginalCategories = card.Categories.Select(c => new CategoryDto { Id = c.Id, Text = c.Text, Color = c.Color }).ToList();
+        }
+    }
 
     private async Task SaveAsync()
     {
@@ -16,9 +27,23 @@
 
     private async Task CancelAsync()
     {
+        if (NewItem is ICard card)
+        {
+            card.Categories.Clear();
+            card.Categories.AddRange(OriginalCategories.Select(c => new CategoryDto { Id = c.Id, Text = c.Text, Color = c.Color }));
+        }
+
         if (OnCancel.HasDelegate)
         {
             await OnCancel.InvokeAsync(null);
+        }
+    }
+
+    private void RemoveCategory(int index)
+    {
+        if (NewItem is ICard card)
+        {
+            card.Categories.RemoveAt(index);
         }
     }
 }
@@ -29,8 +54,14 @@
 
     <li class="card">
         <div class="card-body">
-            <input class="card-title" @bind="card.Title" placeholder="Title"/>
-            <textarea class="card-description" @bind="card.Description" placeholder="Description" cols="30"/>
+            <input class="card-title" @bind="card.Title" placeholder="Title" />
+            <textarea class="card-description" @bind="card.Description" placeholder="Description" cols="30" />
+        </div>
+        <div class="card-categories">
+            @foreach (var category in card.Categories)
+            {
+                <Category CategoryItem="category" IsEditMod="true" Index="card.Categories.IndexOf(category)" RemoveCategory="RemoveCategory"></Category>
+            }
         </div>
         <div class="card-buttons">
             <button class=@((isSaveEnabled) ? "btn-save" : "btn-save-disabled") @onclick="SaveAsync" disabled="@(!(isSaveEnabled))">Save</button>

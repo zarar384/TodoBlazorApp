@@ -26,8 +26,8 @@ Content-Type: application/json
     "Description": "1. Podstatná jména 2. Přídavná jména",
     "IsComplete": false,
     "Categories": [
-        { "Name": "Czech" },
-        { "Name": "Study" }
+        { "Text": "Czech" },
+        { "Text": "Study" }
     ]
 }
 
@@ -40,7 +40,7 @@ Content-Type: application/json
     "Description": "1. Podstatná jména 2. Přídavná jména",
     "IsComplete": false,
     "Categories": [
-        { "Name": "Czech" }
+        { "Text": "Czech" }
     ]
 }
 
@@ -49,7 +49,7 @@ PUT {{TodoMiniAPI_HostAddress}}/todoitems/{id}
 Content-Type: application/json
 
 {
-    "Name": "Study Czech",
+    "Title": "Study Czech",
     "IsComplete": true
 }
 
