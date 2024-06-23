@@ -1,4 +1,10 @@
-﻿.category {
+﻿.card-categories {
+    margin: 5px 0 5px 5px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category, .add-category-button {
     color: white;
     padding: 5px;
     margin: 2px;
@@ -9,6 +15,12 @@
     max-width: 100%;
 }
 
+.add-category-button {
+    background-color: rgba(211, 211, 211, 0.5);
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+}
 
 .category-input {
     border: none;

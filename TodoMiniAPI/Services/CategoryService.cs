@@ -51,6 +51,7 @@ namespace TodoMiniAPI.Services
                     {
                         Text = category.Text,
                         ObjectType = objectType,
+                        Color = category.Color,
                     };
 
                     _context.Categories.Add(newCategory);

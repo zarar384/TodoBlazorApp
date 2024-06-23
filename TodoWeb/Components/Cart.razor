@@ -46,6 +46,16 @@
             card.Categories.RemoveAt(index);
         }
     }
+
+    private void AddCategory()
+    {
+        if (NewItem is ICard card)
+        {
+            var newCategory = new CategoryDto();
+            newCategory.Text = "Text";
+            card.Categories.Add(newCategory);
+        }
+    }
 }
 
 @if (NewItem is ICard card)
@@ -61,6 +71,10 @@
             @foreach (var category in card.Categories)
             {
                 <Category CategoryItem="category" IsEditMod="true" Index="card.Categories.IndexOf(category)" RemoveCategory="RemoveCategory"></Category>
+            }
+            @if(card.Categories.Count <= 4)
+            {
+                <div class="add-category-button" @onclick="AddCategory">New</div>
             }
         </div>
         <div class="card-buttons">

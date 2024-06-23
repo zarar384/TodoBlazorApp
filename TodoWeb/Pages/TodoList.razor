@@ -20,20 +20,20 @@
             }
             else
             {
-                <li class="card">
+                <li class="card @(todo.IsComplete ? "card-completed" : "")">
                     <div class="card-body" @onclick="()=>ToggleComplete(todo)">
-                        <h5 class="card-title" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Id) @todo.Title</h5>
-                        <p class="card-description" style="text-decoration: @(todo.IsComplete ? "line-through" : "none");">@todo.Description</p>
+                        <h5 class="card-title">@todo.Id) @todo.Title</h5>
+                        <p class="card-description">@todo.Description</p>
                     </div>
                     <div class="card-categories">
-                        @foreach(var category in todo.Categories)
+                        @foreach (var category in todo.Categories)
                         {
                             <Category CategoryItem="category"></Category>
                         }
                     </div>
                     <div class="card-buttons">
-                        <button class="btn-edit" @onclick="()=>EditTodo(todo)">Edit</button>
-                        <button class="btn-delete" @onclick="()=>DeleteTodo(todo)">Delete</button>
+                        <button class="btn-edit" @onclick="()=>EditTodo(todo)" disabled="@todo.IsComplete">Edit</button>
+                        <button class="btn-delete" @onclick="()=>DeleteTodo(todo)" disabled="@todo.IsComplete">Delete</button>
                     </div>
                 </li>
             }
